@@ -3,9 +3,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>xyz.nickr.telepad</groupId>
-    <artifactId>Telepad</artifactId>
-    <version>1.0</version>
+    <groupId>xyz.nickr.telegram</groupId>
+    <artifactId>telepad</artifactId>
+    <version>1.0.0</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -15,15 +15,9 @@
         <dependency>
             <groupId>pro.zackpollard.telegrambot.api</groupId>
             <artifactId>jtelegram-botapi</artifactId>
-            <version>1.2.3</version>
+            <version>1.5.1</version>
 		    <scope>compile</scope>
         </dependency>
-		<dependency>
-		    <groupId>org.nanohttpd</groupId>
-		    <artifactId>nanohttpd</artifactId>
-		    <version>2.2.0</version>
-		    <scope>compile</scope>
-		</dependency>
         <dependency>
 		    <groupId>com.google.code.gson</groupId>
 		    <artifactId>gson</artifactId>
@@ -33,7 +27,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.16.6</version>
+            <version>1.16.12</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
