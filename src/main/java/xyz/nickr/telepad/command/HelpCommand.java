@@ -33,11 +33,11 @@ public class HelpCommand extends Command {
         commands.removeIf(c -> !c.hasPermission(bot, message));
         commands.sort(Comparator.comparing(a -> a.getNames()[0]));
 
-        List<String> pages = commands.stream()
+        List<String> lines = commands.stream()
                 .map(c -> "/" + String.join(", /", c.getNames()) + " " + c.getUsage() + "\n  - " + c.getHelp())
                 .collect(Collectors.toList());
 
-        PaginatedData paginatedData = new PaginatedData(pages, 5);
+        PaginatedData paginatedData = new PaginatedData(lines, 5);
         paginatedData.setParseMode(ParseMode.NONE);
         paginatedData.send(0, message);
     }
