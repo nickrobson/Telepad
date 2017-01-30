@@ -34,14 +34,10 @@ public class HelpCommand extends Command {
         commands.sort(Comparator.comparing(a -> a.getNames()[0]));
 
         List<String> pages = commands.stream()
-                .flatMap(c -> Arrays.stream(
-                        new String[]{
-                                "/" + String.join(", /", c.getNames()) + " " + c.getUsage(),
-                                "  - " + c.getHelp()
-                        }))
+                .map(c -> "/" + String.join(", /", c.getNames()) + " " + c.getUsage() + "\n  - " + c.getHelp())
                 .collect(Collectors.toList());
 
-        PaginatedData paginatedData = new PaginatedData(pages, 10); // multiple of 2 as 2 lines per command
+        PaginatedData paginatedData = new PaginatedData(pages, 5);
         paginatedData.setParseMode(ParseMode.NONE);
         paginatedData.send(0, message);
     }
