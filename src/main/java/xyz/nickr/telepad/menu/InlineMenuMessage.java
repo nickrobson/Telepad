@@ -11,7 +11,7 @@ import pro.zackpollard.telegrambot.api.chat.message.content.ContentType;
 import pro.zackpollard.telegrambot.api.keyboards.InlineKeyboardButton;
 import pro.zackpollard.telegrambot.api.keyboards.InlineKeyboardMarkup;
 import pro.zackpollard.telegrambot.api.user.User;
-import xyz.nickr.telepad.ConsecutiveId;
+import xyz.nickr.telepad.util.ConsecutiveId;
 
 /**
  * @author Nick Robson

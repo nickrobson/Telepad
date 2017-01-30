@@ -8,6 +8,7 @@ import pro.zackpollard.telegrambot.api.chat.inline.InlineCallbackQuery;
 import pro.zackpollard.telegrambot.api.chat.message.MessageCallbackQuery;
 import pro.zackpollard.telegrambot.api.event.Listener;
 import pro.zackpollard.telegrambot.api.event.chat.inline.InlineCallbackQueryReceivedEvent;
+import pro.zackpollard.telegrambot.api.event.chat.message.CommandMessageReceivedEvent;
 import pro.zackpollard.telegrambot.api.event.chat.message.MessageCallbackQueryReceivedEvent;
 import pro.zackpollard.telegrambot.api.user.User;
 import xyz.nickr.telepad.menu.InlineMenuButtonResponse;
@@ -62,6 +63,16 @@ public class TelepadListener implements Listener {
     public void onInlineCallbackQueryReceivedEvent(InlineCallbackQueryReceivedEvent event) {
         InlineCallbackQuery query = event.getCallbackQuery();
         handleCallback(query.getData(), query.getFrom(), query);
+    }
+
+    @Override
+    public void onCommandMessageReceived(CommandMessageReceivedEvent event) {
+        String[] args = event.getArgs();
+        String[] command = new String[args.length + 1];
+        command[0] = event.getCommand();
+        System.arraycopy(args, 0, command, 1, args.length);
+
+        bot.getCommandManager().exec(event.getMessage(), command);
     }
 
 }

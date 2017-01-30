@@ -10,7 +10,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import pro.zackpollard.telegrambot.api.chat.message.Message;
 import pro.zackpollard.telegrambot.api.chat.message.send.ParseMode;
-import xyz.nickr.telepad.ConsecutiveId;
+import xyz.nickr.telepad.util.ConsecutiveId;
 
 /**
  * @author Nick Robson

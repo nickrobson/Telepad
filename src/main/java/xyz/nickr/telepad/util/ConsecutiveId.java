@@ -1,4 +1,4 @@
-package xyz.nickr.telepad;
+package xyz.nickr.telepad.util;
 
 import java.util.HashSet;
 import java.util.LinkedList;
