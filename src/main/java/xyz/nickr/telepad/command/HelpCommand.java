@@ -1,14 +1,11 @@
 package xyz.nickr.telepad.command;
 
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
-import pro.zackpollard.telegrambot.api.chat.Chat;
 import pro.zackpollard.telegrambot.api.chat.message.Message;
 import pro.zackpollard.telegrambot.api.chat.message.send.ParseMode;
-import pro.zackpollard.telegrambot.api.user.User;
 import xyz.nickr.telepad.TelepadBot;
 import xyz.nickr.telepad.util.PaginatedData;
 
@@ -18,7 +15,7 @@ import xyz.nickr.telepad.util.PaginatedData;
 public class HelpCommand extends Command {
 
     public HelpCommand() {
-        super("help");
+        super("help", "start");
         this.setHelp("retrieves help information for each command");
     }
 
