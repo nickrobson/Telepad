@@ -24,6 +24,10 @@ public class PaginatedData {
     @Getter @Setter @NonNull private ParseMode parseMode = ParseMode.NONE;
     private InlineMenu[] menus;
 
+    public PaginatedData(List<String> pages) {
+        this.pages.addAll(pages);
+    }
+
     public PaginatedData(List<String> lines, int linesPerPage) {
         List<List<String>> partition = Partition.partition(lines, linesPerPage);
 

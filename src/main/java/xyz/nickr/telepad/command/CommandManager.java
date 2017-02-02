@@ -48,7 +48,7 @@ public class CommandManager {
                     msg.getChat().sendMessage(SendableTextMessage.markdown("You don't have permission to use that command!").replyTo(msg).build());
                 }
             } catch (Exception ex) {
-                msg.getChat().sendMessage(SendableTextMessage.markdown("*Error!* " + Markdown.escape(ex.toString())).replyTo(msg).build());
+                msg.getChat().sendMessage(SendableTextMessage.markdown("*Error!* " + Markdown.escape(ex.toString(), true)).replyTo(msg).build());
                 ex.printStackTrace();
             }
         }

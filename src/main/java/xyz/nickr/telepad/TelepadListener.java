@@ -57,7 +57,9 @@ public class TelepadListener implements Listener {
                     }
                 }
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     @Override
