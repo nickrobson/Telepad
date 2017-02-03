@@ -41,7 +41,7 @@ public class InlineMenu {
     public InlineMenuMessage getMenuFor(Message message) {
         if (!message.getSender().getUsername().equals(message.getBotInstance().getBotUsername()))
             throw new IllegalArgumentException("message not sent by the bot!");
-        return new InlineMenuMessage(message, null).setMenu(this);
+        return new InlineMenuMessage(message, this);
     }
 
     @Accessors(fluent = true)

@@ -38,17 +38,21 @@ public class TelepadListener implements Listener {
                     InlineMenuMessage message = InlineMenuMessage.getMessage(split[1], split[2]);
                     if (message != null) {
                         if (message.getUserPredicate() == null || message.getUserPredicate().test(user)) {
-                            int row = Integer.parseInt(split[3], InlineMenuMessage.RADIX);
-                            int col = Integer.parseInt(split[4], InlineMenuMessage.RADIX);
-                            BiFunction<InlineMenuMessage, User, InlineMenuButtonResponse> func = message.getMenu().getRows().get(row).getButtons().get(col).getCallback();
-                            if (func != null) {
-                                try {
-                                    InlineMenuButtonResponse response = func.apply(message, user);
-                                    if (response != null) {
-                                        query.answer(response.getText(), response.isAlert());
+                            if (split[3].isEmpty() && split[4].equals("BACK")) {
+                                message.back(false);
+                            } else {
+                                int row = Integer.parseInt(split[3], InlineMenuMessage.RADIX);
+                                int col = Integer.parseInt(split[4], InlineMenuMessage.RADIX);
+                                BiFunction<InlineMenuMessage, User, InlineMenuButtonResponse> func = message.getMenu().getRows().get(row).getButtons().get(col).getCallback();
+                                if (func != null) {
+                                    try {
+                                        InlineMenuButtonResponse response = func.apply(message, user);
+                                        if (response != null) {
+                                            query.answer(response.getText(), response.isAlert());
+                                        }
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
                                     }
-                                } catch (Exception ex) {
-                                    ex.printStackTrace();
                                 }
                             }
                         } else {
