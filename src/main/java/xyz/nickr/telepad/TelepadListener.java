@@ -4,6 +4,7 @@ import java.util.function.BiFunction;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import pro.zackpollard.telegrambot.api.chat.CallbackQuery;
+import pro.zackpollard.telegrambot.api.chat.ChatType;
 import pro.zackpollard.telegrambot.api.chat.inline.InlineCallbackQuery;
 import pro.zackpollard.telegrambot.api.chat.message.MessageCallbackQuery;
 import pro.zackpollard.telegrambot.api.event.Listener;
@@ -83,6 +84,9 @@ public class TelepadListener implements Listener {
     @Override
     public void onCommandMessageReceived(CommandMessageReceivedEvent event) {
         bot.getUserCache().store(event.getMessage().getSender());
+
+        if (!event.isBotMentioned() && event.getMessage().getChat().getType() != ChatType.PRIVATE)
+            return;
 
         String[] args = event.getArgs();
         String[] command = new String[args.length + 1];
