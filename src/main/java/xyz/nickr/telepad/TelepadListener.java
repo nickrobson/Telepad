@@ -60,6 +60,8 @@ public class TelepadListener implements Listener {
                         }
                     }
                 }
+            } else {
+                System.out.println("received unexpected callback from " + user.getUsername() + ": " + callback);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
