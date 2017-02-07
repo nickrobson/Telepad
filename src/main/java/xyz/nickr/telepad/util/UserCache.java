@@ -44,6 +44,8 @@ public class UserCache {
     }
 
     public Long getUserId(String username) {
+        if (!username.startsWith("@"))
+            username = "@" + username;
         return usernamesToIds.get(username);
     }
 
@@ -52,6 +54,8 @@ public class UserCache {
     }
 
     public void store(String username, long userId) {
+        if (!username.startsWith("@"))
+            username = "@" + username;
         usernamesToIds.put(username, userId);
         idsToUsernames.put(userId, username);
     }

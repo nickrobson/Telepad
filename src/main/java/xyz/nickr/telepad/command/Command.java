@@ -32,8 +32,8 @@ public abstract class Command {
 
     public abstract void exec(TelepadBot bot, Message message, String[] args);
 
-    public final String escape(String text) { return Markdown.escape(text, true); }
-    public final String escape(String text, boolean brackets) {
+    public static String escape(String text) { return Markdown.escape(text, true); }
+    public static String escape(String text, boolean brackets) {
         return Markdown.escape(text, brackets);
     }
 

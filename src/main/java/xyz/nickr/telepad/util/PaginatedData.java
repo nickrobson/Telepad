@@ -20,6 +20,7 @@ import xyz.nickr.telepad.menu.InlineMenuMessage;
 @Accessors(chain = true)
 public class PaginatedData {
 
+    @Getter @Setter private String header, footer;
     private final List<String> pages = new ArrayList<>();
     @Getter @Setter @NonNull private ParseMode parseMode = ParseMode.NONE;
     private InlineMenu[] menus;
@@ -50,7 +51,7 @@ public class PaginatedData {
         for (int i = 0, j = menus.length; i < j; i++) {
             final int x = i, y = j;
             menus[i] = InlineMenu.builder()
-                    .text(pages.get(i))
+                    .text((header != null ? header + "\n" : "") + pages.get(i) + (footer != null ? "\n" + footer : ""))
                     .parseMode(parseMode)
                     .disableWebPreview(true)
                     .newRow(row -> {
