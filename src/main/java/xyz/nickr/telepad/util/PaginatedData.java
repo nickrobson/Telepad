@@ -76,7 +76,7 @@ public class PaginatedData {
                                     }));
                         }
                         row.newButton(button -> button.text("Page " + (x + 1) + " of " + y));
-                        if (x < y - 1) {
+                        if (x < (y - 1)) {
                             row.newButton(button -> button
                                     .text("»")
                                     .callback((m, u) -> {

@@ -2,6 +2,8 @@ package xyz.nickr.telepad;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import java.text.Collator;
+import java.util.Locale;
 import java.util.Objects;
 import lombok.Getter;
 import pro.zackpollard.telegrambot.api.TelegramBot;
@@ -21,6 +23,9 @@ public final class TelepadBot {
     private final PermissionManager permissionManager;
     private final UserCache userCache;
 
+    private Locale locale = Locale.US;
+    private Collator collator = Collator.getInstance(locale);
+
     public TelepadBot(String token) {
         this(TelegramBot.login(token));
     }
@@ -33,6 +38,11 @@ public final class TelepadBot {
         this.permissionManager = new PermissionManager(this);
 
         this.handle.getEventsManager().register(this.listener);
+    }
+
+    public void setLocale(Locale locale) {
+        this.locale = Objects.requireNonNull(locale, "locale cannot be null");
+        this.collator = Collator.getInstance(locale);
     }
 
     public void registerListener(Listener listener) {

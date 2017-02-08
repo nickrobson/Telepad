@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Stack;
 import java.util.function.Predicate;
-import javax.swing.JTextArea;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
@@ -79,14 +78,16 @@ public class InlineMenuMessage {
             InlineKeyboardButton[] buttons = new InlineKeyboardButton[buttonList.size() + (i == 0 ? extraFirst : 0) + (i + 1 == max ? extraLast : 0)];
             int j = 0;
             if (this.menuStack.size() > 1 && ((i == 0 && backButtonType == BackButtonType.PREPEND_TO_FIRST_ROW) || (i + 1 == max && backButtonType == BackButtonType.PREPEND_TO_LAST_ROW))) {
-                buttons[j++] = getBackButton();
+                buttons[j] = getBackButton();
+                j++;
             }
             for (InlineMenuButton button : buttonList) {
                 String COL_IDENT = Integer.toString(j, RADIX);
-                buttons[j++] = InlineKeyboardButton.builder()
+                buttons[j] = InlineKeyboardButton.builder()
                         .text(button.getText())
                         .callbackData(CALLBACK_UNIQUE + "[" + id + "[" + menu.getId() + "[" + ROW_IDENT + "[" + COL_IDENT)
                         .build();
+                j++;
             }
             if (this.menuStack.size() > 1 && ((i == 0 && backButtonType == BackButtonType.APPEND_TO_FIRST_ROW) || (i + 1 == max && backButtonType == BackButtonType.APPEND_TO_LAST_ROW))) {
                 buttons[j] = getBackButton();

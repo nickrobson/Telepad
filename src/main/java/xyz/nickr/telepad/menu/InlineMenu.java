@@ -1,15 +1,15 @@
 package xyz.nickr.telepad.menu;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 import pro.zackpollard.telegrambot.api.chat.message.Message;
 import pro.zackpollard.telegrambot.api.chat.message.send.ParseMode;
 import xyz.nickr.telepad.util.ConsecutiveId;
@@ -42,7 +42,7 @@ public class InlineMenu {
     }
 
     public InlineMenuMessage getMenuFor(Message message) {
-        if (!message.getSender().getUsername().equals(message.getBotInstance().getBotUsername()))
+        if (!Collator.getInstance(Locale.US).equals(message.getSender().getUsername(), message.getBotInstance().getBotUsername()))
             throw new IllegalArgumentException("message not sent by the bot!");
         return new InlineMenuMessage(message, this);
     }

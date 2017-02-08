@@ -20,6 +20,10 @@ public class PermissionManager {
         this.predicates = new LinkedList<>();
     }
 
+    public TelepadBot getBotInstance() {
+        return bot;
+    }
+
     public void addPredicate(BiPredicate<Message, String> predicate) {
         Objects.requireNonNull(predicate, "predicate");
         predicates.add(predicate);

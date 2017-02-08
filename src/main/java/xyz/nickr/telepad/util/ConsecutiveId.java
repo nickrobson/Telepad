@@ -7,8 +7,8 @@ import java.util.Set;
 
 public class ConsecutiveId {
 
-    private static Set<String> reserved = new HashSet<>();
-    private static List<Character> chars = new LinkedList<>();
+    private static final Set<String> reserved = new HashSet<>();
+    private static final List<Character> chars = new LinkedList<>();
 
     static {
         for (char i = 'a', j = 'z'; i <= j; i++) {
@@ -36,12 +36,12 @@ public class ConsecutiveId {
 
     public String next() {
         if (curr == null) {
-            return curr = chars.get(0).toString();
+            return curr = Character.toString(chars.get(0));
         }
         int idx = chars.indexOf(curr.charAt(curr.length() - 1));
         if (idx == -1) {
             throw new IllegalStateException("char '" + curr.charAt(curr.length() - 1) + "' is not in chars list");
-        } else if (idx == chars.size() - 1) {
+        } else if (idx == (chars.size() - 1)) {
             curr += chars.get(0);
         } else {
             curr = curr.substring(0, curr.length() - 1) + chars.get(idx + 1);

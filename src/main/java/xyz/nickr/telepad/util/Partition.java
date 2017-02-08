@@ -12,10 +12,10 @@ import java.util.function.Function;
 public class Partition {
 
     public static <T> List<List<T>> partition(List<T> list, int chunk) {
-        Function<List<T>, List<T>> listMaker = list instanceof RandomAccess ? ArrayList::new : LinkedList::new;
-        List<List<T>> partition = list instanceof RandomAccess ? new ArrayList<>() : new LinkedList<>();
+        Function<List<T>, List<T>> listMaker = (list instanceof RandomAccess) ? ArrayList::new : LinkedList::new;
+        List<List<T>> partition = (list instanceof RandomAccess) ? new ArrayList<>() : new LinkedList<>();
         int c = 0, l = list.size();
-        while (c + chunk < l) {
+        while ((c + chunk) < l) {
             partition.add(listMaker.apply(list.subList(c, c + chunk)));
             c += chunk;
         }

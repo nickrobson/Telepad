@@ -27,7 +27,7 @@ public abstract class Command {
     }
 
     public boolean hasPermission(TelepadBot bot, Message message) {
-        return permission == null || bot.getPermissionManager().hasPermission(message, permission);
+        return (permission == null) || bot.getPermissionManager().hasPermission(message, permission);
     }
 
     public abstract void exec(TelepadBot bot, Message message, String[] args);

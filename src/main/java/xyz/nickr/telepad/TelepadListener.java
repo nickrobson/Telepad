@@ -45,7 +45,7 @@ public class TelepadListener implements Listener {
     public void onCommandMessageReceived(CommandMessageReceivedEvent event) {
         bot.getUserCache().store(event.getMessage().getSender());
 
-        if (!event.isBotMentioned() && event.getMessage().getChat().getType() != ChatType.PRIVATE)
+        if (!event.isBotMentioned() && (event.getMessage().getChat().getType() != ChatType.PRIVATE))
             return;
 
         String[] args = event.getArgs();
@@ -67,8 +67,8 @@ public class TelepadListener implements Listener {
                 if (split.length == 5) {
                     InlineMenuMessage message = InlineMenuMessage.getMessage(split[1], split[2]);
                     if (message != null) {
-                        if (message.getUserPredicate() == null || message.getUserPredicate().test(user)) {
-                            if (split[3].isEmpty() && split[4].equals("BACK")) {
+                        if ((message.getUserPredicate() == null) || message.getUserPredicate().test(user)) {
+                            if (split[3].isEmpty() && bot.getCollator().equals(split[4], "BACK")) {
                                 message.back(false);
                             } else {
                                 int row = Integer.parseInt(split[3], InlineMenuMessage.RADIX);
@@ -91,7 +91,7 @@ public class TelepadListener implements Listener {
                     }
                 }
             } else {
-                System.out.println("received unexpected callback from " + user.getUsername() + ": " + callback);
+                System.err.println("received unexpected callback from " + user.getUsername() + ": " + callback);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
