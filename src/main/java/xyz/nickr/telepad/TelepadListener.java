@@ -29,6 +29,35 @@ public class TelepadListener implements Listener {
 
     private final TelepadBot bot;
 
+    @Override
+    public void onMessageCallbackQueryReceivedEvent(MessageCallbackQueryReceivedEvent event) {
+        MessageCallbackQuery query = event.getCallbackQuery();
+        handleCallback(query.getData(), query.getFrom(), query);
+    }
+
+    @Override
+    public void onInlineCallbackQueryReceivedEvent(InlineCallbackQueryReceivedEvent event) {
+        InlineCallbackQuery query = event.getCallbackQuery();
+        handleCallback(query.getData(), query.getFrom(), query);
+    }
+
+    @Override
+    public void onCommandMessageReceived(CommandMessageReceivedEvent event) {
+        bot.getUserCache().store(event.getMessage().getSender());
+
+        if (!event.isBotMentioned() && event.getMessage().getChat().getType() != ChatType.PRIVATE)
+            return;
+
+        String[] args = event.getArgs();
+        String[] command = new String[args.length + 1];
+        command[0] = event.getCommand();
+        System.arraycopy(args, 0, command, 1, args.length);
+
+        bot.getCommandManager().exec(event.getMessage(), command);
+    }
+
+    /// Handles inline callbacks
+
     private void handleCallback(String callback, User user, CallbackQuery query) {
         bot.getUserCache().store(user);
 
@@ -69,34 +98,7 @@ public class TelepadListener implements Listener {
         }
     }
 
-    @Override
-    public void onMessageCallbackQueryReceivedEvent(MessageCallbackQueryReceivedEvent event) {
-        MessageCallbackQuery query = event.getCallbackQuery();
-        handleCallback(query.getData(), query.getFrom(), query);
-    }
-
-    @Override
-    public void onInlineCallbackQueryReceivedEvent(InlineCallbackQueryReceivedEvent event) {
-        InlineCallbackQuery query = event.getCallbackQuery();
-        handleCallback(query.getData(), query.getFrom(), query);
-    }
-
-    @Override
-    public void onCommandMessageReceived(CommandMessageReceivedEvent event) {
-        bot.getUserCache().store(event.getMessage().getSender());
-
-        if (!event.isBotMentioned() && event.getMessage().getChat().getType() != ChatType.PRIVATE)
-            return;
-
-        String[] args = event.getArgs();
-        String[] command = new String[args.length + 1];
-        command[0] = event.getCommand();
-        System.arraycopy(args, 0, command, 1, args.length);
-
-        bot.getCommandManager().exec(event.getMessage(), command);
-    }
-
-    //// Begin events that are only listened to so that our UserCache is as up to date as possible. ////
+    /// Begin events that are only listened to so that our UserCache is as up to date as possible. ////
 
     @Override
     public void onCallbackQueryReceivedEvent(CallbackQueryReceivedEvent event) {

@@ -125,7 +125,7 @@ public class InlineMenuMessage {
         if (menu == null || menu.getText() == null || this.message.getContent().getType() != ContentType.TEXT) {
             this.message = this.message.getBotInstance().editMessageReplyMarkup(this.message, this.getMarkup());
         } else {
-            this.message = this.message.getBotInstance().editMessageText(this.message, menu.getText(), menu.getParseMode(), menu.isDisableWebPreview(), this.getMarkup());
+            this.message = this.message.getBotInstance().editMessageText(this.message, menu.getText().get(), menu.getParseMode(), menu.isDisableWebPreview(), this.getMarkup());
         }
     }
 
