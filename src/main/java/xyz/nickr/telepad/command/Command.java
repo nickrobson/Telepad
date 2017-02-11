@@ -5,6 +5,7 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import pro.zackpollard.telegrambot.api.chat.message.Message;
+import pro.zackpollard.telegrambot.api.chat.message.send.ParseMode;
 import pro.zackpollard.telegrambot.api.chat.message.send.SendableTextMessage;
 import xyz.nickr.telepad.TelepadBot;
 import xyz.nickr.telepad.util.Markdown;
@@ -26,6 +27,11 @@ public abstract class Command {
         System.arraycopy(names, 0, this.names, 1, names.length);
     }
 
+    @Override
+    public String toString() {
+        return getClass().getName();
+    }
+
     public boolean hasPermission(TelepadBot bot, Message message) {
         return (permission == null) || bot.getPermissionManager().hasPermission(message, permission);
     }
@@ -39,6 +45,21 @@ public abstract class Command {
 
     protected void sendUsage(Message message) {
         message.getChat().sendMessage(SendableTextMessage.markdown("*Usage:* /" + escape(names[0]) + " " + escape(usage)).replyTo(message).build());
+    }
+
+    public Message reply(Message message, String string, ParseMode parseMode) {
+        return message.getChat().sendMessage(
+                SendableTextMessage.builder()
+                        .message(string)
+                        .parseMode(parseMode != null ? parseMode : ParseMode.NONE)
+                        .disableWebPagePreview(true)
+                        .replyTo(message)
+                        .build()
+        );
+    }
+
+    public Message edit(Message message, String string, ParseMode parseMode) {
+        return message.getBotInstance().editMessageText(message, string, parseMode, true, null);
     }
 
 }
