@@ -121,7 +121,7 @@ public class CommandManager {
         for (File file : dir.listFiles()) {
             if (file.isDirectory()) {
                 state &= registerScriptDirectory(file);
-            } else if (file.isFile()) {
+            } else if (file.isFile() && file.getName().endsWith(".js")) {
                 state &= registerScriptFile(file);
             }
         }
