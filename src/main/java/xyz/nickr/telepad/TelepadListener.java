@@ -45,7 +45,7 @@ public class TelepadListener implements Listener {
     public void onCommandMessageReceived(CommandMessageReceivedEvent event) {
         bot.getUserCache().store(event.getMessage().getSender());
 
-        if (!event.isBotMentioned() && (event.getMessage().getChat().getType() != ChatType.PRIVATE))
+        if (!event.isBotMentioned())
             return;
 
         String[] args = event.getArgs();
