@@ -52,7 +52,7 @@ public class ConsecutiveId {
      * Gets the next unique identifier in the sequence.
      *
      * For example:
-     * <table>
+     * <table summary="describes how identifiers are generated">
      *     <tr>
      *         <td>a</td>
      *         <td>-&gt;</td>
