@@ -48,7 +48,7 @@ public final class ScriptedCommand extends Command {
         this.invocable = (Invocable) engine;
 
         this.bindings = engine.getBindings(ScriptContext.ENGINE_SCOPE);
-        this.bindings.put("escape", (BiFunction<String, Boolean, String>) Command::escape);
+        this.bindings.put("_escape", (BiFunction<String, Boolean, String>) Command::escape);
 
         this.bindings.put("sendUsage", (Consumer<Message>) this::sendUsage);
         this.bindings.put("hasPermission", (BiPredicate<TelepadBot, Message>) this::hasPermission);
@@ -57,8 +57,8 @@ public final class ScriptedCommand extends Command {
         this.bindings.put("setPermission", (Function<String, Command>) this::setPermission);
         this.bindings.put("setUsage", (Function<String, Command>) this::setUsage);
 
-        this.bindings.put("reply", (TriFunction<Message, String, ParseMode, Message>) this::reply);
-        this.bindings.put("edit", (TriFunction<Message, String, ParseMode, Message>) this::edit);
+        this.bindings.put("_reply", (TriFunction<Message, String, ParseMode, Message>) this::reply);
+        this.bindings.put("_edit", (TriFunction<Message, String, ParseMode, Message>) this::edit);
 
         try {
             FileReader reader = new FileReader(this.file);
@@ -86,6 +86,9 @@ public final class ScriptedCommand extends Command {
         engine.eval("System = Java.type('java.lang.System')");
         engine.eval("String = Java.type('java.lang.String')");
         engine.eval("ParseMode = Java.type('" + ParseMode.class.getName() + "')");
+        engine.eval("escape = function(message, state) { return _escape(message, state !== undefined ? state : true); }");
+        engine.eval("reply = function(message, string, parseMode) { return _reply(message, string, parseMode ? parseMode : ParseMode.NONE); }");
+        engine.eval("edit = function(message, string, parseMode) { return _edit(message, string, parseMode ? parseMode : ParseMode.NONE); }");
     }
 
     @Override

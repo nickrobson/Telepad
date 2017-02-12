@@ -25,8 +25,8 @@ public class CommandManager {
     private final TelepadBot bot;
     private final Map<String, Command> commandMap = new HashMap<>();
 
-    private final List<String> scriptLocations = new LinkedList<>();
-    private boolean hasReloadScriptsCommand;
+    private final Set<String> scriptLocations = new HashSet<>();
+    private boolean hasScriptCommands;
 
     public CommandManager(TelepadBot bot) {
         this.bot = bot;
@@ -62,12 +62,17 @@ public class CommandManager {
     }
 
     public boolean registerScriptFile(File file) {
+        this.scriptLocations.add(file.getPath());
+        return _registerScriptFile(file);
+    }
+
+    private boolean _registerScriptFile(File file) {
         if (!file.isFile())
             throw new IllegalArgumentException("must be a file");
         try {
             register(new ScriptedCommand(file));
-            if (!hasReloadScriptsCommand) {
-                hasReloadScriptsCommand = true;
+            if (!hasScriptCommands) {
+                hasScriptCommands = true;
                 register(new Command("reloadscripts") {
                     @Override
                     public void exec(TelepadBot bot, Message message, String[] args) {
@@ -115,14 +120,19 @@ public class CommandManager {
     }
 
     public boolean registerScriptDirectory(File dir) {
+        this.scriptLocations.add(dir.getPath());
+        return _registerScriptDirectory(dir);
+    }
+
+    private boolean _registerScriptDirectory(File dir) {
         if (!dir.isDirectory())
             throw new IllegalArgumentException("must be a directory");
         boolean state = true;
         for (File file : dir.listFiles()) {
             if (file.isDirectory()) {
-                state &= registerScriptDirectory(file);
+                state &= _registerScriptDirectory(file);
             } else if (file.isFile() && file.getName().endsWith(".js")) {
-                state &= registerScriptFile(file);
+                state &= _registerScriptFile(file);
             }
         }
         return state;
@@ -133,13 +143,15 @@ public class CommandManager {
         commandMap.remove("listscripts");
         commandMap.values().removeIf(c -> c instanceof ScriptedCommand);
 
+        this.hasScriptCommands = false;
+
         boolean state = true;
         for (String scriptLocation : this.scriptLocations) {
             File f = new File(scriptLocation);
             if (f.isFile())
-                state &= registerScriptFile(f);
+                state &= _registerScriptFile(f);
             else if (f.isDirectory())
-                state &= registerScriptDirectory(f);
+                state &= _registerScriptDirectory(f);
         }
         return state;
     }
