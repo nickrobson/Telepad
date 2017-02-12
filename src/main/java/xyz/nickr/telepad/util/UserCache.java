@@ -10,6 +10,8 @@ import pro.zackpollard.telegrambot.api.user.User;
 import xyz.nickr.telepad.TelepadBot;
 
 /**
+ * Caches usernames to user IDs.
+ *
  * @author Nick Robson
  */
 public class UserCache {
@@ -39,20 +41,45 @@ public class UserCache {
         }));
     }
 
+    /**
+     * Gets a cached username from a user ID.
+     *
+     * @param id The user ID
+     *
+     * @return The username, or null if not cached.
+     */
     public String getUsername(long id) {
         return idsToUsernames.get(id);
     }
 
+    /**
+     * Gets a cached user ID from a username.
+     *
+     * @param username The username
+     *
+     * @return The user ID, or null if not cached.
+     */
     public Long getUserId(String username) {
         if (!username.startsWith("@"))
             username = "@" + username;
         return usernamesToIds.get(username);
     }
 
+    /**
+     * Stores a User into the cache.
+     *
+     * @param user The user.
+     */
     public void store(User user) {
         store(user.getUsername(), user.getId());
     }
 
+    /**
+     * Stores a username and ID into the cache.
+     *
+     * @param username The username
+     * @param userId The user ID
+     */
     public void store(String username, long userId) {
         if (!username.startsWith("@"))
             username = "@" + username;

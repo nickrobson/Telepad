@@ -12,6 +12,11 @@ import xyz.nickr.telepad.command.CommandManager;
 import xyz.nickr.telepad.permission.PermissionManager;
 import xyz.nickr.telepad.util.UserCache;
 
+/**
+ * The base class for Telepad, providing access to managers and caches.
+ *
+ * @author Nick Robson
+ */
 @Getter
 public final class TelepadBot {
 
@@ -26,10 +31,21 @@ public final class TelepadBot {
     private Locale locale = Locale.US;
     private Collator collator = Collator.getInstance(locale);
 
+    /**
+     * Creates a Telepad bot based on a Telegram Authentication Token
+     * from @BotFather.
+     *
+     * @param token The authentication token
+     */
     public TelepadBot(String token) {
         this(TelegramBot.login(token));
     }
 
+    /**
+     * Creates a Telepad bot based on a {@link TelegramBot}.
+     *
+     * @param handle The telegram bot instance.
+     */
     public TelepadBot(TelegramBot handle) {
         this.handle = Objects.requireNonNull(handle, "Telegram bot is null. Invalid auth token?");
         this.userCache = new UserCache();
@@ -40,15 +56,33 @@ public final class TelepadBot {
         this.handle.getEventsManager().register(this.listener);
     }
 
+    /**
+     * Sets the locale of this bot, used for string checks.
+     *
+     * This updates both the locale and the collator of the bot.
+     *
+     * @param locale The new locale.
+     */
     public void setLocale(Locale locale) {
         this.locale = Objects.requireNonNull(locale, "locale cannot be null");
         this.collator = Collator.getInstance(locale);
     }
 
+    /**
+     * Registers a listener.
+     *
+     * @param listener The listener to be registered.
+     */
     public void registerListener(Listener listener) {
         this.handle.getEventsManager().register(listener);
     }
 
+    /**
+     * Starts receiving updates.
+     *
+     * @param previousUpdates Whether or not to receive updates
+     *                        sent while the bot was offline.
+     */
     public void start(boolean previousUpdates) {
         this.handle.startUpdates(previousUpdates);
     }

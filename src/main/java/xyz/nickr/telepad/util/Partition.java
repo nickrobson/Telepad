@@ -7,10 +7,21 @@ import java.util.RandomAccess;
 import java.util.function.Function;
 
 /**
+ * Partitions a list into sub-lists of sized chunks.
+ *
  * @author Nick Robson
  */
 public class Partition {
 
+    /**
+     * Partitions a list into sub-lists of sized chunks.
+     *
+     * @param list The list to be partitioned.
+     * @param chunk The size of each chunk.
+     * @param <T> The type of the list.
+     *
+     * @return A list of the partitions of the list.
+     */
     public static <T> List<List<T>> partition(List<T> list, int chunk) {
         Function<List<T>, List<T>> listMaker = (list instanceof RandomAccess) ? ArrayList::new : LinkedList::new;
         List<List<T>> partition = (list instanceof RandomAccess) ? new ArrayList<>() : new LinkedList<>();

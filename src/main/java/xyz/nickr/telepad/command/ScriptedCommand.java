@@ -21,6 +21,8 @@ import xyz.nickr.telepad.TelepadBot;
 import xyz.nickr.telepad.util.TriFunction;
 
 /**
+ * Represents a {@link Command} executed by a script.
+ *
  * @author Nick Robson
  */
 @Getter
@@ -28,7 +30,8 @@ public final class ScriptedCommand extends Command {
 
     private static final ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
 
-    private File file;
+    private final File file;
+
     private ScriptEngine engine;
     private Invocable invocable;
     private Bindings bindings;
@@ -40,6 +43,9 @@ public final class ScriptedCommand extends Command {
         this.reload();
     }
 
+    /**
+     * Reloads this script.
+     */
     public void reload() {
         if (!this.file.isFile())
             throw new IllegalArgumentException(file.toString() + " has to be a file");

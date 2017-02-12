@@ -11,6 +11,8 @@ import xyz.nickr.telepad.TelepadBot;
 import xyz.nickr.telepad.util.Markdown;
 
 /**
+ * Represents a command that can be executed by users.
+ *
  * @author Nick Robson
  */
 @Accessors(chain = true)
@@ -32,21 +34,66 @@ public abstract class Command {
         return getClass().getName();
     }
 
+    /**
+     * Checks if a user has permission to use this command.
+     *
+     * @param bot The bot instance
+     * @param message The message
+     *
+     * @return True iff the user has permission to use this command
+     */
     public boolean hasPermission(TelepadBot bot, Message message) {
         return (permission == null) || bot.getPermissionManager().hasPermission(message, permission);
     }
 
+    /**
+     * Executes this command
+     *
+     * @param bot The bot instance
+     * @param message The message the command was sent in
+     * @param args The command arguments (excluding the command name)
+     */
     public abstract void exec(TelepadBot bot, Message message, String[] args);
 
+    /**
+     * Escapes markdown text, including brackets.
+     *
+     * @param text The markdown text
+     *
+     * @return The escaped text
+     */
     public static String escape(String text) { return Markdown.escape(text, true); }
+
+    /**
+     * Escapes markdown text.
+     *
+     * @param text The markdown text
+     * @param brackets Whether or not to escape brackets
+     *
+     * @return The escaped text
+     */
     public static String escape(String text, boolean brackets) {
         return Markdown.escape(text, brackets);
     }
 
+    /**
+     * Sends how to correctly use this command as a reply.
+     *
+     * @param message The message to reply to
+     */
     protected void sendUsage(Message message) {
-        message.getChat().sendMessage(SendableTextMessage.markdown("*Usage:* /" + escape(names[0]) + " " + escape(usage)).replyTo(message).build());
+        reply(message, "*Usage:* /" + escape(names[0]) + " " + escape(usage), ParseMode.MARKDOWN);
     }
 
+    /**
+     * Replies to a message with given reply text and parse mode.
+     *
+     * @param message The message
+     * @param string The reply text
+     * @param parseMode The parse mode
+     *
+     * @return The message
+     */
     public Message reply(Message message, String string, ParseMode parseMode) {
         return message.getChat().sendMessage(
                 SendableTextMessage.builder()
@@ -58,6 +105,15 @@ public abstract class Command {
         );
     }
 
+    /**
+     * Edits a sent message to have new reply text and parse mode.
+     *
+     * @param message The previously-sent message
+     * @param string The new reply text
+     * @param parseMode The parse mode
+     *
+     * @return The edited message
+     */
     public Message edit(Message message, String string, ParseMode parseMode) {
         return message.getBotInstance().editMessageText(message, string, parseMode, true, null);
     }

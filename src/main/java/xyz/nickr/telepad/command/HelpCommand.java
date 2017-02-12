@@ -10,6 +10,9 @@ import xyz.nickr.telepad.TelepadBot;
 import xyz.nickr.telepad.util.PaginatedData;
 
 /**
+ * Collates all commands that a user can used, and displays
+ * them nicely in pages.
+ *
  * @author Nick Robson
  */
 public class HelpCommand extends Command {
@@ -28,7 +31,7 @@ public class HelpCommand extends Command {
     public void exec(TelepadBot bot, Message message, String[] args) {
         List<Command> commands = new LinkedList<>(bot.getCommandManager().getCommands());
         commands.removeIf(c -> !c.hasPermission(bot, message));
-        commands.sort(Comparator.comparing(a -> a.getNames()[0]));
+        commands.sort(Comparator.comparing(a -> bot.getCollator().getCollationKey(a.getNames()[0])));
 
         List<String> lines = commands.stream()
                 .map(c -> "/" + String.join(", /", c.getNames()) + " " + c.getUsage() + "\n  - " + c.getHelp())

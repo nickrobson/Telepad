@@ -4,7 +4,6 @@ import java.util.function.BiFunction;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import pro.zackpollard.telegrambot.api.chat.CallbackQuery;
-import pro.zackpollard.telegrambot.api.chat.ChatType;
 import pro.zackpollard.telegrambot.api.chat.inline.InlineCallbackQuery;
 import pro.zackpollard.telegrambot.api.chat.message.MessageCallbackQuery;
 import pro.zackpollard.telegrambot.api.event.Listener;
@@ -21,6 +20,8 @@ import xyz.nickr.telepad.menu.InlineMenuButtonResponse;
 import xyz.nickr.telepad.menu.InlineMenuMessage;
 
 /**
+ * Handles all events that Telepad needs to function.
+ *
  * @author Nick Robson
  */
 @Getter
