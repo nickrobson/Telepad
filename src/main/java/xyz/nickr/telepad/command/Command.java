@@ -95,14 +95,15 @@ public abstract class Command {
      * @return The message
      */
     public Message reply(Message message, String string, ParseMode parseMode) {
-        return message.getChat().sendMessage(
-                SendableTextMessage.builder()
-                        .message(string)
-                        .parseMode(parseMode != null ? parseMode : ParseMode.NONE)
-                        .disableWebPagePreview(true)
-                        .replyTo(message)
-                        .build()
-        );
+        SendableTextMessage.SendableTextMessageBuilder builder = SendableTextMessage.builder()
+                .message(string)
+                .parseMode(parseMode != null ? parseMode : ParseMode.NONE)
+                .disableWebPagePreview(true);
+        try {
+            return message.getChat().sendMessage(builder.replyTo(message).build());
+        } catch (Exception ex) {
+            return message.getChat().sendMessage(builder.build()); // if the message being replied to was deleted, this will make it still work
+        }
     }
 
     /**
