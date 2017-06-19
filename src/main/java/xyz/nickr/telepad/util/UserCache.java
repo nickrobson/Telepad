@@ -1,11 +1,13 @@
 package xyz.nickr.telepad.util;
 
 import com.google.gson.JsonObject;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import lombok.AllArgsConstructor;
 import pro.zackpollard.telegrambot.api.user.User;
 import xyz.nickr.telepad.TelepadBot;
 
@@ -16,29 +18,35 @@ import xyz.nickr.telepad.TelepadBot;
  */
 public class UserCache {
 
+    public static final String USER_CACHE_FILENAME = "tgusers.cache";
+
     private final Map<String, Long> usernamesToIds;
     private final Map<Long, String> idsToUsernames;
 
     public UserCache() {
-        this.usernamesToIds = new HashMap<>();
-        this.idsToUsernames = new HashMap<>();
+        this.usernamesToIds = new ConcurrentHashMap<>();
+        this.idsToUsernames = new ConcurrentHashMap<>();
 
-        try (FileReader reader = new FileReader("tgusers.cache")) {
-            JsonObject object = TelepadBot.GSON.fromJson(reader, JsonObject.class);
-            object.entrySet().forEach(e -> store(e.getKey(), e.getValue().getAsLong()));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        File file = new File(USER_CACHE_FILENAME);
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            try (FileWriter writer = new FileWriter("tgusers.cache")) {
-                JsonObject object = new JsonObject();
-                this.usernamesToIds.forEach(object::addProperty);
-                TelepadBot.GSON.toJson(object, writer);
+        if (file.exists()) {
+            try (FileReader reader = new FileReader(file)) {
+                JsonObject object = TelepadBot.GSON.fromJson(reader, JsonObject.class);
+                object.entrySet().forEach(e -> store(e.getKey(), e.getValue().getAsLong()));
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-        }));
+        } else {
+            try {
+                file.createNewFile();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        new Thread(new PeriodicSaveThread(true)).start();
+
+        Runtime.getRuntime().addShutdownHook(new Thread(new PeriodicSaveThread(false)));
     }
 
     /**
@@ -87,4 +95,30 @@ public class UserCache {
         idsToUsernames.put(userId, username);
     }
 
+    @AllArgsConstructor
+    private class PeriodicSaveThread implements Runnable {
+
+        private final boolean periodic;
+
+        @Override
+        public void run() {
+            do {
+                Map<String, Long> usernamesToIds = new ConcurrentHashMap<>(UserCache.this.usernamesToIds);
+                try (FileWriter writer = new FileWriter(USER_CACHE_FILENAME)) {
+                    JsonObject object = new JsonObject();
+                    usernamesToIds.forEach(object::addProperty);
+                    TelepadBot.GSON.toJson(object, writer);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                if (periodic) {
+                    try {
+                        Thread.sleep(10 * 60 * 1000); // 10 minutes
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } while (periodic);
+        }
+    }
 }
